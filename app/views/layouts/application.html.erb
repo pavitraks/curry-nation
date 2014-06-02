@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CurryNation</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<ul class="nav navbar-nav pull-right">
+  <ul class="nav navbar-nav">
+    <li class="active"><%= link_to "Recipes",recipes_path %></li>
+  </ul>
+  <% if user_signed_in? %>
+    <li><%=link_to "#{current_user.email}" %></li>
+    <li class="active"><%= link_to "Logout",destroy_user_session_path%></li>
+  <%else%>
+    <li><%= link_to "Login", new_user_session_path %></li>
+    <li class="active"><%= link_to "SignUp",new_user_registration_path%></li>
+  <%end%>
+</ul>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-2">
+      <div class="panel panel-primary" id="panels">
+        <div class="panel-heading">Food Preferences
+        </div>
+        <% FoodPreference.all.each do |fp| %>
+          <p>&nbsp;&nbsp;<%= radio_button_tag 'fp', fp.id, false,:onclick => "fp(#{fp.id});" %>&nbsp;<span><%= fp.name %></span></p>
+        <%end%>
+      </div>
+      <div class="panel panel-primary" id="panels">
+        <div class="panel-heading">Food Type
+        </div>
+        <% FoodType.all.each do |ft| %>
+          <p>&nbsp;&nbsp;<%= radio_button_tag 'ft', ft.id, false,:onclick => "ft(#{ft.id});" %>&nbsp;<span><%= ft.name %></span></p>
+        <%end%>
+      </div>
+      <div class="panel panel-primary" id="panels">
+        <div class="panel-heading">Cuisine
+        </div>
+        <% Cuisine.all.each do |c| %>
+          <p>&nbsp;&nbsp;<%= radio_button_tag 'c', c.id, false,:onclick => "c(#{c.id});" %>&nbsp;<span><%= c.name %></span></p>
+        <%end%>
+      </div>
+    </div>
+    <div class="col-lg-9">
+        <%= yield %>
+    </div>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+  function fp(value){
+    var ft = jQuery( 'input[name=ft]:checked' ).val();
+    var c =  jQuery( 'input[name=c]:checked' ).val();
+    $.ajax({
+      url: '/recipes/search_recipe',
+      data: {fp: value, ft: ft, c: c}
+    })
+  }
+  function ft(value){
+    var fp = jQuery( 'input[name=fp]:checked' ).val();
+    var c =  jQuery( 'input[name=c]:checked' ).val();
+    $.ajax({
+      url: '/recipes/search_recipe',
+      data: {ft: value, fp: fp, c: c}
+    })
+  }
+  function c(value){
+    var ft = jQuery( 'input[name=ft]:checked' ).val();
+    var fp = jQuery( 'input[name=fp]:checked' ).val();
+    $.ajax({
+        url: '/recipes/search_recipe',
+        data: {c: value, ft: ft, fp: fp}
+    })
+  }
+</script>

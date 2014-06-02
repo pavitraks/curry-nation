@@ -1,0 +1,27 @@
+<h1>Listing recipes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Cooking time</th>
+      <th>Difficulty level</th>
+      <th>Food type</th>
+      <th>Food preference</th>
+      <th>Cuisine</th>
+      <th>Ingredients</th>
+      <th>Procedure</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody id= "recipe_search">
+     <%= render :partial => 'recipes/user_recipe' %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Recipe', new_recipe_path, :class=>"btn btn-primary btn-small" %>
